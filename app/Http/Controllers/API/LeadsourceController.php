@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Leadsource;
+use App\Models\LeadSource;
 use Illuminate\Support\Facades\Storage;
 
 class LeadsourceController extends Controller
