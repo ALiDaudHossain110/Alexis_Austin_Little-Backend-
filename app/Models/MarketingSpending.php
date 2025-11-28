@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\LeadSource;
 
 class MarketingSpending extends Model
 {
@@ -16,8 +17,8 @@ class MarketingSpending extends Model
         'july', 'august', 'september', 'october', 'november', 'december'
     ];
 
-    public function leadSource()
-    {
-        return $this->belongsTo(LeadSource::class);
-    }
+public function leadSource()
+{
+    return $this->belongsTo(LeadSource::class, 'lead_source_id');
+}
 }

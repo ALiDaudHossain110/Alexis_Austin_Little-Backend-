@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\MarketingSpending;
-use App\Models\Leadsource;
+use App\Models\LeadSource; // ✅ FIXED IMPORT
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
@@ -14,29 +14,25 @@ class MarketingSpendingController extends Controller
     public function index(Request $request)
     {
         try {
-            $year = (int)$request->query('year', date('Y')); 
+            $year = (int) $request->query('year', date('Y'));
 
-            // Fetch spendings for the requested year
             $spendings = MarketingSpending::with('leadSource')
                 ->where('year', $year)
                 ->get();
 
-            // Fetch all lead sources ordered by name
-            $leadSources = LeadSource::orderBy('name')->get(); 
+            $leadSources = LeadSource::orderBy('name')->get();
 
-            // Fetch all distinct years as array
             $years = MarketingSpending::select('year')
                 ->distinct()
                 ->orderBy('year', 'desc')
                 ->pluck('year')
                 ->toArray();
 
-            // Ensure the current/requested year is in the list
             if (!in_array($year, $years)) {
                 $years[] = $year;
                 rsort($years);
             }
-            
+
             return response()->json([
                 'status' => true,
                 'message' => 'Marketing spendings fetched successfully',
@@ -44,14 +40,14 @@ class MarketingSpendingController extends Controller
                 'leadSources' => $leadSources,
                 'years' => array_values($years),
             ]);
-            
+
         } catch (\Exception $e) {
             Log::error('Marketing Spending Index Error', [
                 'error' => $e->getMessage(),
                 'line' => $e->getLine(),
                 'file' => $e->getFile()
             ]);
-            
+
             return response()->json([
                 'status' => false,
                 'message' => 'An error occurred while fetching marketing spendings',
@@ -65,6 +61,7 @@ class MarketingSpendingController extends Controller
         try {
             $spendings = MarketingSpending::with('leadSource')->get();
             $leadSources = LeadSource::all();
+
             $years = MarketingSpending::select('year')
                 ->distinct()
                 ->orderBy('year', 'desc')
@@ -78,13 +75,13 @@ class MarketingSpendingController extends Controller
                 'leadSources' => $leadSources,
                 'years' => $years,
             ]);
-            
+
         } catch (\Exception $e) {
             Log::error('Marketing Spending Index View Error', [
                 'error' => $e->getMessage(),
                 'line' => $e->getLine()
             ]);
-            
+
             return response()->json([
                 'status' => false,
                 'message' => 'An error occurred',
@@ -131,7 +128,10 @@ class MarketingSpendingController extends Controller
             }
 
             $spending = MarketingSpending::updateOrCreate(
-                ['lead_source_id' => $request->lead_source_id, 'year' => $request->year],
+                [
+                    'lead_source_id' => $request->lead_source_id,
+                    'year' => $request->year
+                ],
                 $monthData
             );
 
@@ -140,13 +140,13 @@ class MarketingSpendingController extends Controller
                 'message' => 'Marketing spending saved successfully',
                 'data' => $spending,
             ]);
-            
+
         } catch (\Exception $e) {
             Log::error('Marketing Spending Store Error', [
                 'error' => $e->getMessage(),
                 'line' => $e->getLine()
             ]);
-            
+
             return response()->json([
                 'status' => false,
                 'message' => 'An error occurred while saving',
