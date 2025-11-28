@@ -18,7 +18,7 @@ Route::post('signup',[AuthController::class,'signup']);
 Route::post('login',[AuthController::class,'login']);
 Route::post('/law-firms', [LawFirmController::class, 'store']);
 
-Route::middleware('auth:api')->group(function(){
+Route::middleware('auth:sanctum')->group(function(){
     Route::get('/marketing-spendings', [MarketingSpendingController::class, 'index']);
     Route::get('/marketing-spendings_view', [MarketingSpendingController::class, 'index_View']);
     Route::post('/marketing-spendings', [MarketingSpendingController::class, 'store']);
