@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: laravel-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        sync: false
+      - key: DB_HOST
+        fromService:
+          name: mysql-db
+          property: host
+      - key: DB_DATABASE
+        value: laravel_app
+      - key: DB_USERNAME
+        value: laravel_user
+      - key: DB_PASSWORD
+        sync: false
+
+databases:
+  - name: mysql-db
+    plan: starter
+    user: laravel_user
+    databaseName: laravel_app
